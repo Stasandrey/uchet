@@ -1,0 +1,10 @@
+[Unit]
+Description=10m
+
+[Timer]
+OnBootSec=2min
+OnCalendar=*-*-* *:00:05
+
+[Install]
+WantedBy=timers.target
+

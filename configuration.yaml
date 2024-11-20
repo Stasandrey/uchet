@@ -1,0 +1,168 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+recorder:
+  purge_keep_days: 500  
+  
+  
+sensor:
+  - platform: sql
+    scan_interval: 600
+    queries:
+      - name: DB Size
+        query: 'SELECT ROUND(page_count * page_size / 1024 / 1024, 1) as size FROM pragma_page_count(), pragma_page_size();'
+        column: 'size'
+        unit_of_measurement: 'MiB'
+
+
+
+mqtt:
+  sensor:
+
+    - name: "Час"
+      state_topic: "hour"
+      unit_of_measurement: "кВт*ч"
+
+    - name: "День"
+      state_topic: "day"
+      unit_of_measurement: "кВт*ч"
+
+
+    - name: "10 минут"
+      state_topic: "10_minutes"
+      unit_of_measurement: "кВт*ч"
+
+    - name: "Активная А" 
+      state_topic: "Active_A"
+      unit_of_measurement: "кВт"
+
+    - name: "Активная B" 
+      state_topic: "Active_B"
+      unit_of_measurement: "кВт"
+
+    - name: "Активная C" 
+      state_topic: "Active_C"
+      unit_of_measurement: "кВт"
+
+    - name: "Активная Полн" 
+      state_topic: "Active_Full"
+      unit_of_measurement: "кВт"
+
+
+
+    - name: "Реактивная А" 
+      state_topic: "Reactive_A"
+      unit_of_measurement: "кВАР"
+
+    - name: "Реактивная B" 
+      state_topic: "Reactive_B"
+      unit_of_measurement: "кВАР"
+
+    - name: "Реактивная C" 
+      state_topic: "Reactive_C"
+      unit_of_measurement: "кВАР"
+
+    - name: "Реактивная Полн" 
+      state_topic: "Reactive_Full"
+      unit_of_measurement: "кВАР"
+
+
+    - name: "Полная А" 
+      state_topic: "Full_A"
+      unit_of_measurement: "кВА"
+
+    - name: "Полная B" 
+      state_topic: "Full_B"
+      unit_of_measurement: "кВА"
+
+    - name: "Полная C" 
+      state_topic: "Full_C"
+      unit_of_measurement: "кВА"
+
+    - name: "Полная П" 
+      state_topic: "Full_Full"
+      unit_of_measurement: "кВА"
+
+
+    - name: "Напряжение A" 
+      state_topic: "U_A"
+      unit_of_measurement: "В"
+
+    - name: "Напряжение B" 
+      state_topic: "U_B"
+      unit_of_measurement: "В"
+
+    - name: "Напряжение C" 
+      state_topic: "U_C"
+      unit_of_measurement: "В"
+
+
+    - name: "Ток A" 
+      state_topic: "Curr_A"
+      unit_of_measurement: "A"
+
+    - name: "Ток B" 
+      state_topic: "Curr_B"
+      unit_of_measurement: "A"
+
+    - name: "Ток C" 
+      state_topic: "Curr_C"
+      unit_of_measurement: "A"
+
+
+    - name: "COS A" 
+      state_topic: "Fi_A"
+      unit_of_measurement: ""
+
+    - name: "COS B" 
+      state_topic: "Fi_B"
+      unit_of_measurement: ""
+
+    - name: "COS C" 
+      state_topic: "Fi_C"
+      unit_of_measurement: ""
+
+
+    - name: "Показания активной" 
+      state_topic: "Energy_Active"
+      unit_of_measurement: "кВт*ч"
+
+    - name: "Показания реактивной" 
+      state_topic: "Energy_Reactive"
+      unit_of_measurement: "кВАР*ч"
+
+    - name: "Потреблено реактивной" 
+      state_topic: "Energy_RReal"
+      unit_of_measurement: "кВАР*ч"
+
+    - name: "Потреблено активной" 
+      state_topic: "Energy_AReal"
+      unit_of_measurement: "кВт*ч"
+
+
+    - name: "Температура" 
+      state_topic: "T_Sch"
+      unit_of_measurement: "С"
+
+
+
+    - name: "orange-cpu"
+      state_topic: "/orange/cpu"
+      unit_of_measurement: "%"
+
+    - name: "orange-hdd"
+      state_topic: "/orange/hdd"
+      unit_of_measurement: "%"    
+
+    - name: "orange-ram"
+      state_topic: "/orange/ram"
+      unit_of_measurement: "%"

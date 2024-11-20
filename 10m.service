@@ -1,0 +1,6 @@
+[Unit]
+Description=10min
+
+[Service]
+ExecStart=/home/andrey/uchet/10minutes.py
+

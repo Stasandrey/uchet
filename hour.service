@@ -1,0 +1,6 @@
+[Unit]
+Description=hour
+
+[Service]
+ExecStart=/home/andrey/uchet/hour.py
+

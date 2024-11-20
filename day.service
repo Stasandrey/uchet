@@ -1,0 +1,6 @@
+[Unit]
+Description=day
+
+[Service]
+ExecStart=/home/andrey/uchet/day.py
+

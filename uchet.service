@@ -1,0 +1,6 @@
+[Unit]
+Description=Uchet
+
+[Service]
+ExecStart=/home/andrey/uchet/main.py
+
