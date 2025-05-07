@@ -1,12 +1,13 @@
 #! /usr/bin/python3
 
-import paho.mqtt.publish as publish
 import requests
 import json
 from datetime import datetime
 from datetime import timedelta
-from datetime import date
 from datetime import time
+
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 token = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwNTc3N2JjZjkyZWM0YTI2YjVmYWU0Z"
          "WFmNzYxZGZkYSIsImlhdCI6MTczNTM3ODM5MiwiZXhwIjoyMDUwNzM4MzkyfQ.q7yLekCN5_8_ju_w"
@@ -30,39 +31,62 @@ def one_hour(now):
     td = now.strftime("%Y-%m-%dT%H:%M:%S+03:00")
     ld = (now + timedelta(hours=1)).strftime("?end_time=%Y-%m-%dT%H:%M:%S")
     hours = hour + td + ld + sensor
-    #    print(hours)
-    answer = json.loads(ask(hours))[0]
-    #    print(answer)
-    #    print(answer[0]['state'])
-    #    print(answer[len(answer) - 1]['state'])
-    #    print(float(answer[len(answer) - 1]['state']) - float(answer[0]['state']))
 
-    # print(td)
-    # print(ld)
-    # result1 = float(answer[1]['state'])
-    # result2 = float(answer[len(answer) - 1]['state']) - float(answer[0]['state'])
-    # print(result1, '   ', result2)
+    answer = json.loads(ask(hours))[0]
+
     t = (now + timedelta(hours = 1) ).strftime("%H:%M")
     pok = round(float(answer[len(answer) - 1]['state']), 3)
     delta = round(float(answer[len(answer) - 1]['state']) - float(answer[0]['state']), 3)
     s = { 'time':t, 'pok':pok, 'delta':delta }
     data.append(s)
-
-def main():
-
+def calculate():
     now = datetime.now()
-    period = datetime.combine( now.date() - timedelta(days = 1 ), time(00, 00, 00) )
-    period = period - timedelta(hours = 1)
+    period = datetime.combine(now.date() - timedelta(days=1), time(00, 00, 00))
+    period = period - timedelta(hours=1)
     print(period)
     item = 0
     while item in range(0, 25):
         # print(period)
-        one_hour( period )
-        period = period + timedelta( hours=1)
+        one_hour(period)
+        period = period + timedelta(hours=1)
         item = item + 1
-#    publish.single('hour', str(result), hostname="127.0.0.1")
+    #
     for item in data:
         print(item)
+
+def build_pdf():
+    xlist = [70, 150, 280, 410, 550]
+    ylist = [750]
+    for i in range(0,26):
+        ylist.append(75 + i * 25)
+    ylist.append(75)
+    w, h = A4
+    c = canvas.Canvas("/home/andrey/homeassistant/www/data.pdf", pagesize=A4)
+
+    text1 = c.beginText(85, 708)
+    text2 = c.beginText(190, 708)
+    text3 = c.beginText(320, 708)
+    text1.setLeading(25)
+    text2.setLeading(25)
+    text3.setLeading(25)
+    text1.textLine('Time')
+    text2.textLine('Pokazaniya')
+    text3.textLine('Delta')
+    for i in range(0,len(data)):
+        text1.textLine(data[i]['time'])
+        text2.textLine(str(data[i]['pok']))
+        if i!=len(data) - 1:
+            text3.textLine(str(data[i+1]['delta']))
+    c.drawText(text1)
+    c.drawText(text2)
+    c.drawText(text3)
+    c.grid(xlist, ylist)
+    c.showPage()
+    c.save()
+
+def main():
+    calculate()
+    build_pdf()
 
 if __name__ == "__main__":
     main()
