@@ -63,7 +63,7 @@ def build_pdf(per):
         ylist.append(75 + i * 25)
     ylist.append(75)
     w, h = A4
-    c = canvas.Canvas("/home/andrey/data.pdf", pagesize=A4)
+    c = canvas.Canvas("/home/andrey/homeassistant/data.pdf", pagesize=A4)
     c.drawString(250, 760, per)
 
     text1 = c.beginText(85, 708)
